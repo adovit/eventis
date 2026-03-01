@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="lt">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Eventis — Bilietai lietuviškiems renginiams</title>
+
+    <!--
+      Theme initialisation — runs synchronously before first paint.
+      Priority: localStorage > prefers-color-scheme > light (default).
+      Must remain inline with no defer/async — extracting to an external
+      file would delay execution until after the browser paints, causing FOUC.
+
+      Also adds .no-transition briefly to suppress the 200ms color crossfade
+      on initial load (we only want the animation on explicit user toggles).
+    -->
+    <script>
+      (function () {
+        var root = document.documentElement
+        var stored = localStorage.getItem('theme')
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+
+        if (stored === 'dark' || (!stored && prefersDark)) {
+          root.classList.add('dark')
+        }
+
+        // Suppress transition animation on initial load
+        root.classList.add('no-transition')
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            root.classList.remove('no-transition')
+          })
+        })
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
